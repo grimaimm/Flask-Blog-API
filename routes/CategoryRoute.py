@@ -5,6 +5,4 @@ CategoryRoute = Blueprint("CategoryRoute", __name__)
 
 CategoryRoute.route("/api/categories", methods=["POST"])(create_category)
 CategoryRoute.route("/api/categories", methods=["GET"])(get_all_categories)
-# CategoryRoute.route("/api/categories/<int:id>", methods=["GET"])(get_category_by_id)
-# CategoryRoute.route("/api/categories/<int:id>", methods=["PUT"])(update_category_by_id)
 CategoryRoute.route("/api/categories/<int:id>", methods=["DELETE"])(delete_category_by_id)
