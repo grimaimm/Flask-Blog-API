@@ -98,6 +98,8 @@ def get_post_by_id(id):
                 "content": comment.content,
                 "created_at": comment.created_at,
                 "post_id": comment.post_id,
+                "author_id": comment.author_id,
+                "author_name": comment.author.name if comment.author else "Author tidak ditemukan"
             }
             for comment in comments
         ]
