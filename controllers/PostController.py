@@ -159,6 +159,7 @@ def delete_post_by_id(id):
     author = Author.query.get(post.author_id)
     if author:
         author.total_posts = max(0, author.total_posts - 1)
+        author.total_comments = max(0, author.total_comments - 1)
         db.session.add(author)
 
     db.session.delete(post)
