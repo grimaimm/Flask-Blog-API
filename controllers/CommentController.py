@@ -36,8 +36,22 @@ def create_comment():
 # Method GET - Get All Comments - /api/comments
 def get_all_comments():
     comments = Comment.query.all()
-    comments_list = [comment.to_dict() for comment in comments]
-    return jsonify({"status": "success", "data": comments_list}), 200
+    comments_list = []
+
+    for comment in comments:
+        post = Post.query.get(comment.post_id)
+        author = Author.query.get(comment.author_id)
+        comment_data = {
+            "id": comment.id,
+            "content": comment.content,
+            "created_at": comment.created_at,
+            "post_id": comment.post_id,
+            "post_title": post.title,
+            "author_id": comment.author_id,
+            "author_name": author.name,
+        }
+        comments_list.append(comment_data)
+    return jsonify({"status": "success", "comments_data": comments_list}), 200
 
 
 # Method DELETE - Delete Comment - /api/comments/:id

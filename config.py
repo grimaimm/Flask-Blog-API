@@ -14,6 +14,7 @@ app.config["SQLALCHEMY_DATABASE_URI"] = (
     f"{os.getenv('DB_NAME')}"
 )
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+app.config["APP_URL"] = os.getenv("APP_URL")
 
 db = SQLAlchemy(app)
 

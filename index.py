@@ -11,6 +11,7 @@ app.register_blueprint(CategoryRoute)
 app.register_blueprint(CommentRoute)
 app.register_blueprint(PostRoute)
 
+
 @app.route("/")
 def index():
     api_list = {
@@ -39,7 +40,25 @@ def index():
             "5. Method DELETE - Menghapus Posts berdasarkan ID": "/api/posts/<id>",
         },
     }
-    return jsonify({"status": "success", "available_apis": api_list}), 200
+    return (
+        jsonify(
+            {
+                "status": "success",
+                "available_apis": api_list,
+                "author": [
+                    {
+                        "name": "Muhammad Rahim",
+                        "nim": "21.83.0643",
+                        "github": "github.com/grimaimm",
+                        "app_url": "http://{}".format(app.config["SERVER_NAME"]),
+                    }
+                ],
+            }
+        ),
+        200,
+    )
+
+
 # if __name__ == "__main__":
 #     with app.app_context():
 #         db.create_all()

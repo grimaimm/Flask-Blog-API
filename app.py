@@ -40,7 +40,23 @@ def index():
             "5. Method DELETE - Menghapus Posts berdasarkan ID": "/api/posts/<id>",
         },
     }
-    return jsonify({"status": "success", "available_apis": api_list}), 200
+    return (
+        jsonify(
+            {
+                "status": "success",
+                "available_apis": api_list,
+                "author": [
+                    {
+                        "name": "Muhammad Rahim",
+                        "nim": "21.83.0643",
+                        "github": "github.com/grimaimm",
+                        "app_url": "https://{}".format(app.config["APP_URL"]),
+                    }
+                ],
+            }
+        ),
+        200,
+    )
 
 
 if __name__ == "__main__":

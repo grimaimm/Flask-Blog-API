@@ -64,7 +64,7 @@ def get_all_posts():
 def get_post_by_id(id):
     post = Post.query.get(id)
     if not post:
-        return jsonify({"status": "error", "message": "Post not found"}), 404
+        return jsonify({"status": "error", "message": "Posts tidak ditemukan"}), 404
 
     comments = Comment.query.filter_by(post_id=post.id).all()
     total_comments = len(comments)
@@ -102,19 +102,21 @@ def get_post_by_id(id):
 def update_post_by_id(id):
     post = Post.query.get(id)
     if not post:
-        return jsonify({"status": "error", "message": "Post not found"}), 404
+        return jsonify({"status": "error", "message": "Posts tidak ditemukan"}), 404
     post_data = request.get_json()
     post.title = post_data["title"]
     post.content = post_data["content"]
+    post.author_id = post_data["author_id"]
+    post.category_id = post_data["category_id"]
     db.session.commit()
-    return jsonify({"status": "success", "message": "Post updated successfully"}), 200
+    return jsonify({"status": "success", "message": "Posts berhasil diperbarui", "posts_data": post.to_dict()}), 200
 
 
 # Method DELETE - Delete Post By ID - /api/posts/<int:id>
 def delete_post_by_id(id):
     post = Post.query.get(id)
     if not post:
-        return jsonify({"status": "error", "message": "Post not found"}), 404
+        return jsonify({"status": "error", "message": "Posts tidak ditemukan"}), 404
 
     author = Author.query.get(post.author_id)
     if author:
@@ -125,4 +127,4 @@ def delete_post_by_id(id):
 
     db.session.delete(post)
     db.session.commit()
-    return jsonify({"status": "success", "message": "Post deleted successfully"})
+    return jsonify({"status": "success", "message": "Posts dengan ID " + str(id) + " berhasil dihapus"}), 200
