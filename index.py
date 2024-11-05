@@ -50,7 +50,7 @@ def index():
                         "name": "Muhammad Rahim",
                         "nim": "21.83.0643",
                         "github": "github.com/grimaimm",
-                        "app_url": "http://{}".format(app.config["SERVER_NAME"]),
+                        "app_url": "https://{}".format(app.config["APP_URL"]),
                     }
                 ],
             }
