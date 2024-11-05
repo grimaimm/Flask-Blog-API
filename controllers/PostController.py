@@ -164,22 +164,20 @@ def delete_post_by_id(id):
     if not post:
         return jsonify({"status": "error", "message": "Posts tidak ditemukan"}), 404
 
+    comments = Comment.query.filter_by(post_id=post.id).all()
+
+    for comment in comments:
+        author = Author.query.get(comment.author_id)
+        if author:
+            author.total_comments = max(0, author.total_comments - 1)
+            db.session.add(author)
+
+        db.session.delete(comment)
+
     author = Author.query.get(post.author_id)
     if author:
-        # Hitung jumlah komentar yang terkait dengan post
-        comments = Comment.query.filter_by(post_id=post.id).all()
-        total_comments_to_delete = len(comments)
-
-        # Kurangi total_posts dan total_comments
-        author.total_posts = max(0, author.total_posts - 1)  # Kurangi total_posts
-        author.total_comments = max(0, author.total_comments - total_comments_to_delete)  # Kurangi total_comments
-
-        # Update penulis di session
+        author.total_posts = max(0, author.total_posts - 1)
         db.session.add(author)
-
-        # Hapus semua komentar terkait post
-        for comment in comments:
-            db.session.delete(comment)
 
     db.session.delete(post)
     db.session.commit()
