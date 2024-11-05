@@ -33,6 +33,18 @@ def create_post():
             ),
             404,
         )
+        
+    existing_post = Post.query.filter_by(title=new_post_data["title"]).first()
+    if existing_post:
+        return (
+            jsonify(
+                {
+                    "status": "error",
+                    "message": "Gagal membuat post. Title sudah ada.",
+                }
+            ),
+            400,
+        )
 
     new_post = Post(
         title=new_post_data["title"],
