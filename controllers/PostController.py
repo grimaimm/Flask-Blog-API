@@ -9,6 +9,31 @@ from models.AuthorModel import Author
 # Method POST - Create Post - /api/posts
 def create_post():
     new_post_data = request.get_json()
+
+    author = Author.query.get(new_post_data.get("author_id"))
+    if not author:
+        return (
+            jsonify(
+                {
+                    "status": "error",
+                    "message": "Gagal membuat post. Author tidak ditemukan",
+                }
+            ),
+            404,
+        )
+
+    category = Category.query.get(new_post_data.get("category_id"))
+    if not category:
+        return (
+            jsonify(
+                {
+                    "status": "error",
+                    "message": "Gagal membuat post. Category tidak ditemukan",
+                }
+            ),
+            404,
+        )
+
     new_post = Post(
         title=new_post_data["title"],
         content=new_post_data["content"],
@@ -17,17 +42,15 @@ def create_post():
     )
     db.session.add(new_post)
 
-    author = Author.query.get(new_post_data["author_id"])
-    if author:
-        author.total_posts = author.total_posts + 1
-        db.session.add(author)
+    author.total_posts = author.total_posts + 1
+    db.session.add(author)
 
     db.session.commit()
     return (
         jsonify(
             {
                 "status": "success",
-                "message": "Post created successfully",
+                "message": "Post berhasil dibuat",
                 "posts_data": new_post.to_dict(),
             }
         ),
@@ -109,7 +132,16 @@ def update_post_by_id(id):
     post.author_id = post_data["author_id"]
     post.category_id = post_data["category_id"]
     db.session.commit()
-    return jsonify({"status": "success", "message": "Posts berhasil diperbarui", "posts_data": post.to_dict()}), 200
+    return (
+        jsonify(
+            {
+                "status": "success",
+                "message": "Posts berhasil diperbarui",
+                "posts_data": post.to_dict(),
+            }
+        ),
+        200,
+    )
 
 
 # Method DELETE - Delete Post By ID - /api/posts/<int:id>
@@ -127,4 +159,12 @@ def delete_post_by_id(id):
 
     db.session.delete(post)
     db.session.commit()
-    return jsonify({"status": "success", "message": "Posts dengan ID " + str(id) + " berhasil dihapus"}), 200
+    return (
+        jsonify(
+            {
+                "status": "success",
+                "message": "Posts dengan ID " + str(id) + " berhasil dihapus",
+            }
+        ),
+        200,
+    )
