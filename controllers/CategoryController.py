@@ -45,14 +45,25 @@ def delete_category_by_id(id):
     if not category:
         return jsonify({"status": "error", "message": "Category tidak ditemukan"}), 404
 
-    posts = Post.query.filter_by(category_id=category.id).all()
-    for post in posts:
-        author = Author.query.get(post.author_id)
-        if author:
-            author.total_posts -= 1
-            db.session.add(author)
+    # posts = Post.query.filter_by(category_id=category.id).all()
+    # for post in posts:
+    #     author = Author.query.get(post.author_id)
+    #     if author:
+    #         author.total_posts -= 1
+    #         db.session.add(author)
 
-        db.session.delete(post)
+    #     db.session.delete(post)
+    posts = Post.query.filter_by(category_id=category.id).all()
+    if posts:
+        return (
+            jsonify(
+                {
+                    "status": "error",
+                    "message": "Category tidak dapat dihapus karena masih ada postingan yang terkait.",
+                }
+            ),
+            400,
+        )
 
     db.session.delete(category)
     db.session.commit()
