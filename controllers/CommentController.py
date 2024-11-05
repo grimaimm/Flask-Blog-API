@@ -8,17 +8,39 @@ from models.AuthorModel import Author
 # Method POST - Create Comment - /api/comments
 def create_comment():
     new_comment_data = request.get_json()
+
+    post = Post.query.get(new_comment_data.get("post_id"))
+    if not post:
+        return (
+            jsonify(
+                {
+                    "status": "error",
+                    "message": "Gagal membuat comment. Post tidak ditemukan",
+                }
+            ),
+            404,
+        )
+
+    author = Author.query.get(new_comment_data.get("author_id"))
+    if not author:
+        return (
+            jsonify(
+                {
+                    "status": "error",
+                    "message": "Gagal membuat comment. Author tidak ditemukan",
+                }
+            ),
+            404,
+        )
+
     new_comment = Comment(
         content=new_comment_data["content"],
         post_id=new_comment_data["post_id"],
         author_id=new_comment_data["author_id"],
     )
     db.session.add(new_comment)
-
-    author = Author.query.get(new_comment_data["author_id"])
-    if author:
-        author.total_comments = author.total_comments + 1
-        db.session.add(author)
+    author.total_comments += 1
+    db.session.add(author)
 
     db.session.commit()
     return (
