@@ -18,5 +18,5 @@ app.config["APP_URL"] = os.getenv("APP_URL")
 
 db = SQLAlchemy(app)
 
-with app.app_context():
-    db.create_all()
+# with app.app_context():
+#     db.create_all()
