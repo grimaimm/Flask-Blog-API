@@ -186,7 +186,7 @@ def delete_post_by_id(id):
         jsonify(
             {
                 "status": "success",
-                "message": f"Posts dengan ID {id} berhasil dihapus",
+                "message": f"Posts dengan ID {id} dan semua Comments terkait berhasil dihapus",
             }
         ),
         200,
