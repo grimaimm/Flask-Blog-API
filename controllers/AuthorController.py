@@ -121,9 +121,6 @@ def delete_author_by_id(id):
     if not author:
         return jsonify({"status": "error", "message": "Author tidak ditemukan"}), 404
 
-    # posts = Post.query.filter_by(author_id=author.id).all()
-    # for post in posts:
-    #     db.session.delete(post)
     posts = Post.query.filter_by(author_id=author.id).all()
     if posts:
         return (
@@ -135,6 +132,10 @@ def delete_author_by_id(id):
             ),
             400,
         )
+
+    comments = Comment.query.filter_by(author_id=author.id).all()
+    for comment in comments:
+        db.session.delete(comment)
 
     db.session.delete(author)
     db.session.commit()
