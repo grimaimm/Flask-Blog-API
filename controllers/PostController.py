@@ -143,7 +143,6 @@ def update_post_by_id(id):
     post_data = request.get_json()
     post.title = post_data["title"]
     post.content = post_data["content"]
-    post.author_id = post_data["author_id"]
     post.category_id = post_data["category_id"]
     db.session.commit()
     return (
